@@ -1,26 +1,30 @@
-# Clinical Trial Feasibility ML
+# Clinical Trial Feasibility & Site Selection
 
-## Overview
+> **Machine learning for clinical trial enrollment forecasting and site prioritisation.**
 
-This project demonstrates how machine learning can be used to support **clinical trial feasibility and site selection**.
+## 📌 Overview
 
-The objective is to predict the number of days required for a clinical trial site to enroll patients based on information available before the trial begins.
+Clinical trial feasibility involves identifying sites that are likely to recruit participants efficiently and meet enrollment targets.
 
-The project uses a synthetic dataset representing clinical trial sites and compares several regression models to identify the best-performing approach.
+This project explores how **machine learning regression models** can be applied to predict **site-level enrollment time** using clinical trial feasibility variables available before study initiation.
 
-> **Note:** The dataset is synthetic and is intended for demonstration and educational purposes only. It does not represent real clinical trial data.
+The workflow covers:
+
+**Data → Exploration → Feature Analysis → Regression → Model Comparison → Site Ranking**
+
+> **Dataset note:** The dataset used in this project was loaded from a prepared CSV file. It is intended for demonstration and portfolio purposes and should not be interpreted as real-world clinical evidence.
 
 ---
 
-## Business Problem
+## 🎯 Objective
 
-Clinical trial teams need to identify sites that are likely to recruit patients efficiently.
+The primary objective is to predict:
 
-A predictive model can help answer:
+> **How many days will a clinical trial site require to complete enrollment?**
 
-> **Which clinical trial sites are likely to achieve enrollment targets faster?**
+The prediction can then be used to rank sites according to their expected enrollment performance.
 
-This can support activities such as:
+### Potential applications
 
 - Clinical trial feasibility
 - Site selection
@@ -30,91 +34,158 @@ This can support activities such as:
 
 ---
 
-## Dataset
+## 📊 Dataset
 
-The dataset contains 100 synthetic clinical trial sites.
+The dataset contains information for **100 clinical trial sites**.
 
 ### Features
 
 | Feature | Description |
 |---|---|
-| `site_id` | Unique identifier for each site |
-| `site_experience` | Number of previous clinical trials |
+| `site_id` | Unique identifier for each clinical trial site |
+| `site_experience` | Previous clinical trial experience |
 | `patient_pool` | Estimated available patient population |
-| `startup_speed` | Estimated number of days required for site start-up |
-| `enrollment_days` | Number of days required for enrollment — target variable |
+| `startup_speed` | Estimated site start-up time in days |
+| `enrollment_days` | Actual enrollment duration — target variable |
 
-The dataset was generated using Python and saved as:
+The dataset is stored in:
 
 ```text
 data/clinical_trial_sites.csv
-Machine Learning Approach
+🤖 Machine Learning
 
-This is a supervised regression problem because the target variable, enrollment_days, is numerical.
+This project is formulated as a supervised regression problem because the target variable is numerical.
 
-The following models were evaluated:
+Four regression approaches were evaluated:
 
-Linear Regression
-Random Forest Regressor
-Gradient Boosting Regressor
-XGBoost Regressor
-Evaluation Metric
+1. Linear Regression
 
-The primary evaluation metric is Mean Absolute Error (MAE).
+A simple baseline model used to establish a reference level of performance.
 
-MAE represents the average difference between predicted and actual enrollment time in days.
+2. Random Forest
+
+An ensemble of decision trees capable of modelling non-linear relationships.
+
+3. Gradient Boosting
+
+An ensemble method that sequentially builds trees to reduce prediction error.
+
+4. XGBoost
+
+A gradient-boosting implementation designed for efficient and high-performance predictive modelling.
+
+📈 Model Performance
+
+The models were evaluated using Mean Absolute Error (MAE).
 
 Lower MAE indicates better predictive performance.
 
-Model Results
+Model                  MAE
+──────────────────────────────
+Linear Regression       94 days
+Random Forest           34 days
+Gradient Boosting       23 days ⭐
+XGBoost                 27 days
+Best-performing model
 
-Results from the current test set:
+Gradient Boosting achieved the lowest MAE of 23 days on the current test set.
 
-Linear Regression    → MAE: 94 days
-Random Forest        → MAE: 34 days
-Gradient Boosting    → MAE: 23 days
-XGBoost              → MAE: 27 days
+This means that, on the current test data, its predictions differed from the observed enrollment duration by approximately 23 days on average.
 
-Gradient Boosting produced the lowest MAE on the current test set.
+Because the dataset is limited in size and intended for demonstration, further validation would be required before drawing conclusions about real-world performance.
 
-Because the dataset is small and synthetic, these results should not be interpreted as evidence of real-world clinical trial performance.
-
-Feature Importance
+🔎 Feature Importance
 
 Feature importance was examined using the tree-based models.
 
-The models consistently identified patient pool as the strongest predictor in this synthetic dataset.
+The results showed that:
 
-This result is expected to some extent because the synthetic data-generation process assigns a strong relationship between patient pool and enrollment time.
+Patient Pool       ████████████████████████████████████████
+Startup Speed      █
+Site Experience    █
 
-Feature importance indicates predictive contribution to the model; it should not be interpreted as causal evidence.
+Patient pool was the dominant predictive feature in the current dataset.
 
-Site Selection
+This should be interpreted as a model-specific predictive relationship, not as evidence of causality.
 
-The trained model can be used to estimate enrollment time for all available sites.
+🏥 Site Prioritisation
 
-Sites can then be ranked according to predicted enrollment time:
+After selecting the best-performing model, enrollment time can be predicted for all available sites.
 
+Sites are then ranked by predicted enrollment duration.
+
+                 Clinical Trial Sites
+                         │
+                         ▼
+                 Predict Enrollment
+                         │
+                         ▼
+                Rank by Predicted Days
+                         │
+                         ▼
+                 Prioritise Sites
+Example
 Lower predicted enrollment days
-                ↓
-        Higher priority
+              ↓
+      Higher site priority
 
-Example workflow:
+This provides a simple framework for translating a regression model into a potential site-selection decision-support tool.
 
-Site Data
-    ↓
-Data Preparation
-    ↓
-Train Regression Models
-    ↓
-Evaluate Models
-    ↓
-Select Best-Performing Model
-    ↓
-Predict Enrollment Days
-    ↓
-Rank Clinical Trial Sites
-Project Structure
+🔬 Analytical Workflow
+┌──────────────────────┐
+│      Load Data       │
+└──────────┬───────────┘
+           ↓
+┌──────────────────────┐
+│   Explore & Prepare  │
+└──────────┬───────────┘
+           ↓
+┌──────────────────────┐
+│  Train Regression    │
+│       Models         │
+└──────────┬───────────┘
+           ↓
+┌──────────────────────┐
+│ Compare Performance  │
+│        (MAE)         │
+└──────────┬───────────┘
+           ↓
+┌──────────────────────┐
+│ Feature Importance   │
+└──────────┬───────────┘
+           ↓
+┌──────────────────────┐
+│ Predict Site-Level   │
+│  Enrollment Duration │
+└──────────┬───────────┘
+           ↓
+┌──────────────────────┐
+│    Rank Sites        │
+└──────────────────────┘
+🛠️ Technologies
+
+Programming & Analysis
+
+Python
+Pandas
+NumPy
+
+Machine Learning
+
+Scikit-learn
+XGBoost
+
+Visualisation
+
+Matplotlib
+
+Development
+
+Jupyter Notebook
+VS Code
+Git
+GitHub
+📁 Project Structure
 clinical-trial-feasibility-ml/
 │
 ├── data/
@@ -128,82 +199,63 @@ clinical-trial-feasibility-ml/
 ├── src/
 │   └── model.py
 │
+├── .gitignore
 ├── README.md
-├── requirements.txt
-└── .gitignore
-Technologies
-Python
-Pandas
-NumPy
-Scikit-learn
-XGBoost
-Matplotlib
-Jupyter Notebook
-Git / GitHub
-Installation
-
-Clone the repository:
-
+└── requirements.txt
+🚀 Getting Started
+Clone the repository
 git clone https://github.com/Uchemadu7Nwachukwu/clinical-trial-feasibility-ml.git
-
-Navigate to the project:
-
+Navigate to the project
 cd clinical-trial-feasibility-ml
-
-Create a virtual environment:
-
+Create a virtual environment
 python -m venv .venv
-
-Activate it on Windows:
-
+Activate the environment — Windows
 .\.venv\Scripts\Activate.ps1
-
-Install the required packages:
-
+Install dependencies
 pip install -r requirements.txt
-Running the Project
+Run the analysis
 
-Open the project in VS Code and launch:
+Open:
 
 notebooks/01_site_selection.ipynb
 
-Run the notebook cells sequentially to:
+and execute the notebook cells sequentially.
 
-Load the dataset
-Explore the data
-Train regression models
-Compare model performance
-Analyse feature importance
-Predict enrollment time
-Rank clinical trial sites
-Future Improvements
+📌 Key Findings
+The problem can be approached as a regression task.
+Four regression models were compared.
+Gradient Boosting produced the lowest MAE on the current test set.
+Patient pool was the most influential feature in the tree-based models.
+Model predictions can be used to create a ranked list of potential trial sites.
+🔭 Future Development
 
-Potential improvements include:
+Potential extensions include:
 
-Cross-validation for more reliable model evaluation
-Hyperparameter tuning
-SHAP-based model explainability
-Actual vs predicted visualisations
-Classification of sites into high/low feasibility
-Enrollment forecasting over time
-Additional clinical trial feasibility variables
-Real-world clinical trial operational data, where appropriately sourced and permitted
-Key Takeaway
+Cross-validation
+Hyperparameter optimisation
+SHAP model explainability
+Actual vs. predicted analysis
+Prediction intervals and uncertainty estimation
+Additional site and study-level variables
+Classification of sites into feasibility categories
+Time-to-enrollment forecasting
+Validation using appropriately sourced real-world data
+⚠️ Limitations
 
-This project demonstrates a complete machine learning workflow for a clinical trial feasibility use case:
+The current dataset is limited to a small number of variables and sites. Model performance may change substantially with larger, more representative datasets.
 
-Data → Exploration → Modelling → Evaluation → Explainability → Site Prioritisation
+Predictions should therefore not be used for actual clinical trial site selection without appropriate validation, domain review, governance, and real-world data.
 
-The main objective is to demonstrate how predictive modelling can support data-driven decision-making in clinical trial planning.
+👤 Project
+
+Clinical Trial Feasibility & Site Selection — Machine Learning
+
+Built as a demonstration of applying predictive modelling to clinical trial feasibility and operational decision-making.
 
 
-Then save the file.
-
-### Push the README to GitHub
-
-In your VS Code terminal:
+Then save it and run:
 
 ```powershell
 git add README.md
-git commit -m "Add project documentation"
+git commit -m "Improve project documentation"
 git push
