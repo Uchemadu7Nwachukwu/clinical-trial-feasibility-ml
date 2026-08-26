@@ -50,88 +50,104 @@ The dataset contains information for **100 clinical trial sites**.
 
 The dataset is stored in:
 
-```text
-data/clinical_trial_sites.csv
-🤖 Machine Learning
+## 🤖 Machine Learning
 
-This project is formulated as a supervised regression problem because the target variable is numerical.
+This project is formulated as a **supervised regression problem** because the target variable, `enrollment_days`, is numerical.
 
-Four regression approaches were evaluated:
+Four regression models were evaluated:
 
-1. Linear Regression
+### 1. Linear Regression
 
-A simple baseline model used to establish a reference level of performance.
+A baseline model used to establish a reference level of performance.
 
-2. Random Forest
+### 2. Random Forest
 
 An ensemble of decision trees capable of modelling non-linear relationships.
 
-3. Gradient Boosting
+### 3. Gradient Boosting
 
 An ensemble method that sequentially builds trees to reduce prediction error.
 
-4. XGBoost
+### 4. XGBoost
 
 A gradient-boosting implementation designed for efficient and high-performance predictive modelling.
 
-📈 Model Performance
+---
 
-The models were evaluated using Mean Absolute Error (MAE).
+## 📈 Model Performance
+
+The models were evaluated using **Mean Absolute Error (MAE)**.
 
 Lower MAE indicates better predictive performance.
 
-Model                  MAE
-──────────────────────────────
-Linear Regression       94 days
-Random Forest           34 days
-Gradient Boosting       23 days ⭐
-XGBoost                 27 days
-Best-performing model
+| Model | MAE |
+|---|---:|
+| Linear Regression | 94 days |
+| Random Forest | 34 days |
+| **Gradient Boosting ⭐** | **23 days** |
+| XGBoost | 27 days |
 
-Gradient Boosting achieved the lowest MAE of 23 days on the current test set.
+### Best-Performing Model
 
-This means that, on the current test data, its predictions differed from the observed enrollment duration by approximately 23 days on average.
+**Gradient Boosting achieved the lowest MAE of 23 days on the current test set.**
+
+On the current test data, its predictions differed from the observed enrollment duration by approximately **23 days on average**.
 
 Because the dataset is limited in size and intended for demonstration, further validation would be required before drawing conclusions about real-world performance.
 
-🔎 Feature Importance
+---
+
+## 🔎 Feature Importance
 
 Feature importance was examined using the tree-based models.
 
-The results showed that:
+The results showed:
 
-Patient Pool       ████████████████████████████████████████
-Startup Speed      █
-Site Experience    █
+| Feature | Relative Importance |
+|---|---:|
+| **Patient Pool** | **98.8%** |
+| Startup Speed | 1.1% |
+| Site Experience | 0.1% |
 
-Patient pool was the dominant predictive feature in the current dataset.
+**Patient Pool was the dominant predictive feature in the current dataset.**
 
-This should be interpreted as a model-specific predictive relationship, not as evidence of causality.
+This should be interpreted as a **model-specific predictive relationship**, not as evidence of causality.
 
-🏥 Site Prioritisation
+---
+
+## 🏥 Site Prioritisation
 
 After selecting the best-performing model, enrollment time can be predicted for all available sites.
 
 Sites are then ranked by predicted enrollment duration.
 
-                 Clinical Trial Sites
-                         │
-                         ▼
-                 Predict Enrollment
-                         │
-                         ▼
-                Rank by Predicted Days
-                         │
-                         ▼
-                 Prioritise Sites
-Example
+### Decision Logic
+
+```text
+Clinical Trial Sites
+        ↓
+Predict Enrollment Days
+        ↓
+Rank Sites by Prediction
+        ↓
+Prioritise Sites
+```
+
+### Example
+
+```text
 Lower predicted enrollment days
               ↓
       Higher site priority
+```
 
-This provides a simple framework for translating a regression model into a potential site-selection decision-support tool.
+This provides a simple framework for translating a regression model into a potential **site-selection decision-support tool**.
 
-🔬 Analytical Workflow
+---
+
+## 🔬 Analytical Workflow
+
+```text
 ┌──────────────────────┐
 │      Load Data       │
 └──────────┬───────────┘
@@ -162,30 +178,39 @@ This provides a simple framework for translating a regression model into a poten
 ┌──────────────────────┐
 │    Rank Sites        │
 └──────────────────────┘
-🛠️ Technologies
+```
 
-Programming & Analysis
+---
 
-Python
-Pandas
-NumPy
+## 🛠️ Technologies
 
-Machine Learning
+### Programming & Analysis
 
-Scikit-learn
-XGBoost
+- Python
+- Pandas
+- NumPy
 
-Visualisation
+### Machine Learning
 
-Matplotlib
+- Scikit-learn
+- XGBoost
 
-Development
+### Visualisation
 
-Jupyter Notebook
-VS Code
-Git
-GitHub
-📁 Project Structure
+- Matplotlib
+
+### Development
+
+- Jupyter Notebook
+- VS Code
+- Git
+- GitHub
+
+---
+
+## 📁 Project Structure
+
+```text
 clinical-trial-feasibility-ml/
 │
 ├── data/
@@ -202,60 +227,102 @@ clinical-trial-feasibility-ml/
 ├── .gitignore
 ├── README.md
 └── requirements.txt
-🚀 Getting Started
-Clone the repository
+```
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the repository
+
+```bash
 git clone https://github.com/Uchemadu7Nwachukwu/clinical-trial-feasibility-ml.git
-Navigate to the project
+```
+
+### 2. Navigate to the project
+
+```bash
 cd clinical-trial-feasibility-ml
-Create a virtual environment
+```
+
+### 3. Create a virtual environment
+
+```bash
 python -m venv .venv
-Activate the environment — Windows
+```
+
+### 4. Activate the environment — Windows
+
+```powershell
 .\.venv\Scripts\Activate.ps1
-Install dependencies
+```
+
+### 5. Install dependencies
+
+```bash
 pip install -r requirements.txt
-Run the analysis
+```
+
+### 6. Run the analysis
 
 Open:
 
+```text
 notebooks/01_site_selection.ipynb
+```
 
-and execute the notebook cells sequentially.
+Execute the notebook cells sequentially.
 
-📌 Key Findings
-The problem can be approached as a regression task.
-Four regression models were compared.
-Gradient Boosting produced the lowest MAE on the current test set.
-Patient pool was the most influential feature in the tree-based models.
-Model predictions can be used to create a ranked list of potential trial sites.
-🔭 Future Development
+---
+
+## 📌 Key Findings
+
+- The problem was formulated as a **regression task**.
+- Four regression models were compared.
+- **Gradient Boosting produced the lowest MAE at 23 days** on the current test set.
+- Patient Pool was the most influential feature in the tree-based models.
+- Model predictions can be used to create a ranked list of potential trial sites.
+
+---
+
+## 🔭 Future Development
 
 Potential extensions include:
 
-Cross-validation
-Hyperparameter optimisation
-SHAP model explainability
-Actual vs. predicted analysis
-Prediction intervals and uncertainty estimation
-Additional site and study-level variables
-Classification of sites into feasibility categories
-Time-to-enrollment forecasting
-Validation using appropriately sourced real-world data
-⚠️ Limitations
+- Cross-validation
+- Hyperparameter optimisation
+- SHAP model explainability
+- Actual vs. predicted analysis
+- Prediction intervals and uncertainty estimation
+- Additional site and study-level variables
+- Classification of sites into feasibility categories
+- Time-to-enrollment forecasting
+- Validation using appropriately sourced real-world data
 
-The current dataset is limited to a small number of variables and sites. Model performance may change substantially with larger, more representative datasets.
+---
 
-Predictions should therefore not be used for actual clinical trial site selection without appropriate validation, domain review, governance, and real-world data.
+## ⚠️ Limitations
 
-👤 Project
+The current dataset is limited to a small number of variables and sites. Model performance may change substantially with larger and more representative datasets.
 
-Clinical Trial Feasibility & Site Selection — Machine Learning
+Predictions should therefore **not be used for actual clinical trial site selection** without appropriate validation, domain review, governance, and real-world data.
 
-Built as a demonstration of applying predictive modelling to clinical trial feasibility and operational decision-making.
+---
 
+## 👤 Project
 
-Then save it and run:
+**Clinical Trial Feasibility & Site Selection — Machine Learning**
 
-```powershell
-git add README.md
-git commit -m "Improve project documentation"
-git push
+A demonstration of applying predictive modelling to clinical trial feasibility, enrollment forecasting, and operational decision-making.
+
+---
+
+## 📄 Dataset
+
+The dataset is loaded from:
+
+```text
+data/clinical_trial_sites.csv
+```
+
+The dataset is intended for **educational and portfolio demonstration purposes**.
